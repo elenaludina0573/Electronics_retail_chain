@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics
+from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 from network.models import Factory, Individual, Retail, Product
@@ -12,7 +14,8 @@ class FactoryViewSet(viewsets.ModelViewSet):
     """
     queryset = Factory.objects.all()
     serializer_class = FactorySerializer
-    filter_fields = ['country']
+    filter_backends = DjangoFilterBackend
+    filterset_fields = ['country']
 
     def has_object_permission(self, request):
         return request.user.is_staff or request.user.is_superuser
@@ -24,7 +27,6 @@ class RetailViewSet(viewsets.ModelViewSet):
     """
     queryset = Retail.objects.all()
     serializer_class = RetailSerializer
-    filter_fields = ['city']
     permission_classes = (IsAdminUser, IsAuthenticated)
 
 
@@ -34,7 +36,6 @@ class IndividualViewSet(viewsets.ModelViewSet):
     """
     queryset = Individual.objects.all()
     serializer_class = IndividualSerializer
-    filter_fields = ['city']
     permission_classes = (IsAdminUser, IsAuthenticated)
 
 
